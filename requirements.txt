@@ -1,0 +1,10 @@
+openai==0.28
+kivy
+kivymd
+plyer
+pydub
+ffpyplayer
+pillow
+docxtpl
+gradio_client
+pyobjus

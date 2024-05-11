@@ -1,0 +1,385 @@
+#: import audio_player plyer.audio
+
+<AudioInterface>:
+    do_default_tab: False
+    audio: audio_player
+
+    TabbedPanelItem:
+
+        text: "Yardım"
+        id: help_tab
+        FloatLayout:
+            canvas:
+                Color:
+                    rgba: (241/255, 249/255, 248/255, 1) 
+                Rectangle:
+                    size: root.width, root.height*0.95
+                    pos: root.pos
+            size: root.width, root.height
+            
+            Image:
+                source: "resources/logo_small.png"
+                pos_hint: {"x" : -0.035, "y" : 0.83}
+                size_hint: 0.17, 0.17
+
+            MDLabel:
+                id: help_info
+                markup: True
+                text: "En iyi deneyim için uygulamayı tam ekranda çalıştırın.\n\nSayfanın sol üstünde de görüldüğü gibi uygulamanın üç sekmesi var: Yardım, Kayıt ve Arama. Diğer sekmelere ekranın sol üstündeki sekme isimlerine basarak geçebilirsiniz.\n\n[b][u]Yardım[/u][/b]\nŞu anki sekme yani ‘Yardım’ sekmesi uygulamanın nasıl kullanılacağını anlatıyor. \n\n[b][u]Kayıt[/u][/b]\nBu sekmede hastanızın randevusunu isterseniz “Kaydetmeye Başla” tuşu ile uygulama üzerinden kaydedebilirsiniz, ya da elinizde hazır ses kayıt dosyası varsa “Ses Dosyası Yükle” tuşu ile uygulamaya yükleyebilirsiniz. Uygulamada ses dosyanız olduğunda “Kaydı Oynat” ve “Kaydı İşle ve Özetle” tuşları açılacaktır. \n\n[b]Geri Oynatma:[/b] Kaydınızı baştan sona oynatır, kaydı durdurup başlattığınızda en baştan oynamaya başlar.\n\n[b]Kaydı İşle ve Özetle:[/b] Ses kaydınız işlenmek üzere bizim sunucumuza yönlendirilir. Ses kaydının uzunluğuna bağlı olarak bu süreç birkaç dakika sürebilir, bu süreçte uygulamadaki diğer tuşlara basamazsınız. Süreç tamamlandığında sağdaki metin kutusunda özetiniz görünecektir. Özette düzeltilmesi gereken yerler olduğunu düşünüyorsanız metin kutusunu bizzat düzenleyebilirsiniz.\n\n[b]Özetle:[/b] Kaydınız işlenirken arka planda birçok işlem meydana geliyor ama özet çıkarmak bunların en kısası (~10-20 saniye). Kaydınız bir kere işlendikten sonra bu tuş açılacaktır ve aldığınız özetten memnun değilseniz çok daha hızlı bir şekilde bu tuş ile yeni bir özet alabilirsiniz.\n\nRapor taslağınızı “Rapor Taslağı Yükle” tuşuyla yükleyebilirsiniz. Taslağınızı yükledikten sonra sağ taraftaki metin kutusunda bir özet varsa “Raporu Hazırla” tuşu açılacaktır. Özetin yeterli ve doğru olduğunu düşündüğünüzde bu tuşla raporunuzu derletebilirsiniz. \n\n[b]DİKKAT:[/b] Özeti düzenlerken konu başlıklarını değiştirmemeye özen gösterin. Örneğin “Şikayet:” bir konu başlığıdır ve bu yazıyı değiştirirseniz raporunuz eksik çıkabilir. Yanlışlıkla bir başlığı sildiyseniz ve düzeltemediyseniz yeni bir özet çıkarmayı deneyebilirsiniz. \n\n[b][u]Arama[/u][/b]\nÖzetinizi çıkardıktan sonra bu sekmede sunucumuzun çıkardığı transkript üzerinden arama yapabilirsiniz. Arama kutusuna aradığınız kelimeyi yazıp “Ara” tuşuna bastığınızda aradığınız kelimenin kayıtta kronolojik olarak hangi saniyelerde çıktığı ve hangi cümlelerde geçtiği yazar. \n\nEk olarak, aradığınız cümlelere tıklayarak ses kaydınızda bu cümlenin söylendiği noktayı oynatabilirsiniz. Ekranın altındaki ses oynatıcı ile kaydınızı daha kontrollü bir şekilde dinleyebilirsiniz."
+                pos_hint: {"x" : .15, "y" : 0.135}
+                size_hint: 0.7, 0.75
+                font_size: 35
+
+
+    TabbedPanelItem:
+                
+        text: "Kayıt"
+        id: record_tab
+        FloatLayout:
+            canvas:
+                Color:
+                    rgba: (241/255, 249/255, 248/255, 1) 
+                Rectangle:
+                    size: root.width, root.height*0.95
+                    pos: root.pos
+            size: root.width, root.height
+
+            Image:
+                source: "resources/logo_small.png"
+                pos_hint: {"x" : -0.035, "y" : 0.83}
+                size_hint: 0.17, 0.17
+
+            MDLabel:
+                id: state
+                text: "Kaydetme durumu: " + root.translate(root.audio.state)
+                pos_hint: {"x" : .1, "y" : .61}
+                size_hint: 0.15, 0.05
+
+            MDRaisedButton: 
+                id: record_button
+                text: "Kaydetmeye Başla"
+                md_bg_color: 38/255, 84/255, 108/255, 1
+                on_release: root.start_recording()
+                pos_hint: {"x" : .27, "y" : .6}
+                size_hint: 0.15, 0.05
+
+            MDLabel:
+                id: audio_loc
+                text: "Ses kaydı henüz yüklenmedi."
+                pos_hint: {"x" : .1, "y" : .51}
+                size_hint: 0.15, 0.05
+
+            MDRaisedButton:
+                id: audio_upload
+                text: "Ses Dosyası Yükle"
+                md_bg_color: 38/255, 84/255, 108/255, 1
+                on_release: root.audio_chooser()
+                pos_hint: {"x" : .27, "y" : .5}
+                size_hint: 0.15, 0.05
+
+            MDLabel:
+                id: template_loc
+                text: "Rapor taslağı henüz yüklenmedi."
+                size_hint: 0.15, 0.05
+                pos_hint: {"x" : .1, "y" : .41}
+
+            MDRaisedButton:
+                id: template_upload
+                text: "Rapor Taslağı Yükle"
+                md_bg_color: 38/255, 84/255, 108/255, 1
+                on_release: root.template_chooser()
+                size_hint: 0.15, 0.05
+                pos_hint: {"x" : .27, "y" : .4}
+
+            MDRectangleFlatButton: 
+                id: process_button
+                text: "Kaydı İşle ve Özetle"
+                on_press: root.summarize_hf()
+                disabled: True
+                size_hint: 0.10, 0.05
+                pos_hint: {"x" : .1, "y" : .3}
+
+            MDRectangleFlatButton: 
+                id: summarize_button
+                text: "Özetle"
+                on_press: root.summarize_gpt()
+                disabled: True
+                size_hint: 0.10, 0.05
+                pos_hint: {"x" : .2175, "y" : .3}
+
+            MDRectangleFlatButton: 
+                id: fill_report_button
+                text: "Raporu Hazırla"
+                on_press: root.fill_report()
+                disabled: True
+                size_hint: 0.10, 0.05
+                pos_hint: {"x" : .33, "y" : .3}
+
+            TextInput:
+                id: summary
+                pos_hint: {"x" : .45, "y" : 0.1}
+                size_hint: 0.5, 0.85
+                background_normal: "atlas://data/images/defaulttheme/textinput_active"
+
+    TabbedPanelItem:
+        text: "Arama"
+        id: search_tab
+
+        FloatLayout:            
+            size: root.width, root.height
+            canvas:
+                Color:
+                    rgba: (241/255, 249/255, 248/255, 1) 
+                Rectangle:
+                    size: root.width, root.height*0.95
+                    pos: root.pos
+
+            Slider:
+                id: view_audio_slider
+                max: root.sound.length if root.sound else 1
+                value: 0
+                pos_hint: {"y" : -0.45}
+                disabled: True
+
+            Slider:
+                id: interact_audio_slider
+                max: root.sound.length if root.sound else 1
+                value: 0
+                pos_hint: {"y" : -0.45}
+                on_value: root.on_slider_value_change(self.value)
+                opacity: 0
+
+            Button:
+                id: search_playback_button
+                background_normal: ''
+                background_disabled_normal: ''
+                background_color: (241/255, 249/255, 248/255, 1) 
+                pos_hint: {"x":0.015, "y" : 0.08}
+                size_hint: 0.03, 0.03
+                on_release: root.play_sound()
+                disabled: True
+                Image:
+                    id: search_playback_button_img
+                    #fit_mode: "scale-down"
+                    source: "resources/play.png"
+                    size: self.parent.width, self.parent.height
+                    center_x: self.parent.center_x
+                    center_y: self.parent.center_y
+
+            MDLabel:
+                id: timer
+                text: "00:00"
+                pos_hint: {"x":0.05, "y" : 0.07}
+                size_hint: 0.05, 0.05
+
+            Image:
+                source: "resources/logo_small.png"
+                pos_hint: {"x" : -0.035, "y" : 0.83}
+                size_hint: 0.17, 0.17
+
+            TextInput:
+                id: search_bar
+                size_hint: 0.15, 0.05
+                pos_hint: {"x" : .345, "y" : .95}
+                background_normal: "atlas://data/images/defaulttheme/textinput_active"
+
+
+            MDRaisedButton:
+                id: search_button
+                text: "Ara"
+                md_bg_color: 38/255, 84/255, 108/255, 1
+                on_release: root.search_word()
+                size_hint: 0.15, 0.05
+                pos_hint: {"x" : .515, "y" : .95}
+                disabled: True
+
+
+
+            Button:
+                id: search_result_0
+                size_hint: 0.8, 0.05
+                pos_hint: {"x" : .1, "y" : .87}
+                disabled: True
+                opacity: 0
+                on_release: root.jump_to_sentence(0)
+                text_size: self.size 
+                halign: "left"
+                valign: "middle"
+
+            Button:
+                id: search_result_1
+                size_hint: 0.8, 0.05
+                pos_hint: {"x" : .1, "y" : .82}
+                disabled: True
+                opacity: 0
+                on_release: root.jump_to_sentence(1)
+                text_size: self.size 
+                halign: "left"
+                valign: "middle"
+
+            Button:
+                id: search_result_2
+                size_hint: 0.8, 0.05
+                pos_hint: {"x" : .1, "y" : .77}
+                disabled: True
+                opacity: 0
+                on_release: root.jump_to_sentence(2)
+                text_size: self.size 
+                halign: "left"
+                valign: "middle"
+
+            Button:
+                id: search_result_3
+                size_hint: 0.8, 0.05
+                pos_hint: {"x" : .1, "y" : .72}
+                disabled: True
+                opacity: 0
+                on_release: root.jump_to_sentence(3)
+                text_size: self.size 
+                halign: "left"
+                valign: "middle"
+
+            Button:
+                id: search_result_4
+                size_hint: 0.8, 0.05
+                pos_hint: {"x" : .1, "y" : .67}
+                disabled: True
+                opacity: 0
+                on_release: root.jump_to_sentence(4)
+                text_size: self.size 
+                halign: "left"
+                valign: "middle"
+                
+            Button:
+                id: search_result_5
+                size_hint: 0.8, 0.05
+                pos_hint: {"x" : .1, "y" : .62}
+                disabled: True
+                opacity: 0
+                on_release: root.jump_to_sentence(5)
+                text_size: self.size 
+                halign: "left"
+                valign: "middle"
+                
+            Button:
+                id: search_result_6
+                size_hint: 0.8, 0.05
+                pos_hint: {"x" : .1, "y" : .57}
+                disabled: True
+                opacity: 0
+                on_release: root.jump_to_sentence(6)
+                text_size: self.size 
+                halign: "left"
+                valign: "middle"
+                
+            Button:
+                id: search_result_7
+                size_hint: 0.8, 0.05
+                pos_hint: {"x" : .1, "y" : .52}
+                disabled: True
+                opacity: 0
+                on_release: root.jump_to_sentence(7)
+                text_size: self.size 
+                halign: "left"
+                valign: "middle"
+                
+            Button:
+                id: search_result_8
+                size_hint: 0.8, 0.05
+                pos_hint: {"x" : .1, "y" : .47}
+                disabled: True
+                opacity: 0
+                on_release: root.jump_to_sentence(8)
+                text_size: self.size 
+                halign: "left"
+                valign: "middle"
+                
+            Button:
+                id: search_result_9
+                size_hint: 0.8, 0.05
+                pos_hint: {"x" : .1, "y" : .42}
+                disabled: True
+                opacity: 0
+                on_release: root.jump_to_sentence(9)
+                text_size: self.size 
+                halign: "left"
+                valign: "middle"
+                
+            Button:
+                id: search_result_10
+                size_hint: 0.8, 0.05
+                pos_hint: {"x" : .1, "y" : .37}
+                disabled: True
+                opacity: 0
+                on_release: root.jump_to_sentence(10)
+                text_size: self.size 
+                halign: "left"
+                valign: "middle"
+                
+            Button:
+                id: search_result_11
+                size_hint: 0.8, 0.05
+                pos_hint: {"x" : .1, "y" : .32}
+                disabled: True
+                opacity: 0
+                on_release: root.jump_to_sentence(11)
+                text_size: self.size 
+                halign: "left"
+                valign: "middle"
+                
+            Button:
+                id: search_result_12
+                size_hint: 0.8, 0.05
+                pos_hint: {"x" : .1, "y" : .27}
+                disabled: True
+                opacity: 0
+                on_release: root.jump_to_sentence(12)
+                text_size: self.size 
+                halign: "left"
+                valign: "middle"
+                
+            Button:
+                id: search_result_13
+                size_hint: 0.8, 0.05
+                pos_hint: {"x" : .1, "y" : .22}
+                disabled: True
+                opacity: 0
+                on_release: root.jump_to_sentence(13)
+                text_size: self.size 
+                halign: "left"
+                valign: "middle"
+                
+            Button:
+                id: search_result_14
+                size_hint: 0.8, 0.05
+                pos_hint: {"x" : .1, "y" : .17}
+                disabled: True
+                opacity: 0
+                on_release: root.jump_to_sentence(14)
+                text_size: self.size 
+                halign: "left"
+                valign: "middle"
+                
+            Button:
+                id: search_result_15
+                size_hint: 0.8, 0.05
+                pos_hint: {"x" : .1, "y" : .12}
+                disabled: True
+                opacity: 0
+                on_release: root.jump_to_sentence(15)
+                text_size: self.size 
+                halign: "left"
+                valign: "middle"
+                
+            Button:
+                id: search_result_16
+                size_hint: 0.8, 0.05
+                pos_hint: {"x" : .1, "y" : .07}
+                disabled: True
+                opacity: 0
+                on_release: root.jump_to_sentence(16)
+                text_size: self.size 
+                halign: "left"
+                valign: "middle"
+                
+        
